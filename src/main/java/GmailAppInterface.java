@@ -83,7 +83,7 @@ public class GmailAppInterface {
                 String receiverEmail = receiverField.getText();
                 java.util.Date selectedDate = calendar.getDate();
 
-                SendEmail sendEmail = new SendEmail(senderField.getText(), receiverField.getText());
+                SendEmail sendEmail = new SendEmail(senderEmail, receiverEmail);
                 sendEmail.Send();
 
                 // Ejemplo de salida en consola con los datos ingresados
