@@ -7,19 +7,19 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class SendEmail {
-    public static void main(String[] args) {
 
-        final String fromEmail = "jeampiers20052005@gmail.com";
-        final String password = "bmsygjpzkxyefpca";
+    final String fromEmail = "jeampiers20052005@gmail.com";
+    final String password = "bmsygjpzkxyefpca";
 
-        Scanner scanner = new Scanner(System.in);
+    String toEmail;
+    String subject;
 
-        System.out.println("Enter the destination email: ");
-        String destination = scanner.nextLine();
+    public SendEmail(String toEmail, String subject) {
+        toEmail = this.toEmail;
+        subject = this.subject;
+    }
 
-        System.out.println("Enter the reminder: ");
-        String subject = scanner.nextLine();
-
+    public void Send() {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.trust", "smtp.gmail.com");
@@ -38,9 +38,9 @@ public class SendEmail {
         try {
             Message email = new MimeMessage(session);
             email.setFrom(new InternetAddress(fromEmail));
-            email.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destination));
-            email.setSubject(subject);
-            email.setText(subject);
+            email.setRecipients(Message.RecipientType.TO, InternetAddress.parse(this.toEmail));
+            email.setSubject(this.subject);
+            email.setText(this.subject);
 
             Transport.send(email);
             System.out.println("Email was sent correctly!");
@@ -48,7 +48,5 @@ public class SendEmail {
             e.printStackTrace();
             System.out.println("Something went wrong!");
         }
-
-
     }
 }
