@@ -4,7 +4,6 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
-import java.util.Scanner;
 
 public class SendEmail {
 
@@ -15,8 +14,8 @@ public class SendEmail {
     String subject;
 
     public SendEmail(String toEmail, String subject) {
-        toEmail = this.toEmail;
-        subject = this.subject;
+        this.toEmail = toEmail;
+        this.subject = subject;
     }
 
     public void Send() {
