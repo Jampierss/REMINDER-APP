@@ -7,8 +7,8 @@ import java.util.Properties;
 
 public class SendEmail {
 
-    final String fromEmail = "jeampiers20052005@gmail.com";
-    final String password = "bmsygjpzkxyefpca";
+    final String fromEmail = System.getenv("EMAIL_USER");
+    final String password = System.getenv("EMAIL_PASS");
 
     String toEmail;
     String subject;
@@ -18,7 +18,7 @@ public class SendEmail {
         this.subject = subject;
     }
 
-    public void Send() {
+    public boolean Send() {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.trust", "smtp.gmail.com");
@@ -43,9 +43,11 @@ public class SendEmail {
 
             Transport.send(email);
             System.out.println("Email was sent correctly!");
+            return true;
         } catch (MessagingException e) {
             e.printStackTrace();
             System.out.println("Something went wrong!");
+            return false;
         }
     }
 }
