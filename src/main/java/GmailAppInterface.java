@@ -4,7 +4,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
@@ -29,6 +28,9 @@ public class GmailAppInterface {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
+
+        ImageIcon icon = new ImageIcon(GmailAppInterface.class.getResource("/images/icono.png"));
+        frame.setIconImage(icon.getImage());
 
         // Calendar
         JCalendar calendar = new JCalendar();
@@ -78,27 +80,44 @@ public class GmailAppInterface {
         acceptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acciones cuando se presiona el botón "Aceptar"
                 String senderEmail = senderField.getText();
                 String receiverEmail = receiverField.getText();
-                java.util.Date selectedDate = calendar.getDate();
+                String selectedDate = calendar.getDate().toString();
 
-                SendEmail sendEmail = new SendEmail(senderEmail, receiverEmail);
-                sendEmail.Send();
+                JDialog progressDialog = new JDialog(frame, "Sending...", Dialog.ModalityType.APPLICATION_MODAL);
+                JProgressBar progressBar = new JProgressBar();
+                progressBar.setIndeterminate(true);
+                progressBar.setPreferredSize(new Dimension(200, 20));
+                progressDialog.add(progressBar);
+                progressDialog.pack();
+                progressDialog.setLocationRelativeTo(frame);
+                progressDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
-                // Ejemplo de salida en consola con los datos ingresados
+                Thread sendThread = new Thread(() -> {
+                    SendEmail sendEmail = new SendEmail(senderEmail, receiverEmail, selectedDate);
+
+
+
+                    if (sendEmail.Send()) {
+                        JOptionPane.showMessageDialog(frame, "Email was sent correctly!", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Something went wrong!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    progressDialog.dispose();
+                });
+
+                sendThread.start();
+                progressDialog.setVisible(true);
+
                 System.out.println("Fecha seleccionada: " + selectedDate);
                 System.out.println("Remitente: " + senderEmail);
                 System.out.println("Destinatario: " + receiverEmail);
             }
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Acciones cuando se presiona el botón "Cancelar"
-                System.exit(0);
-            }
+        cancelButton.addActionListener(e -> {
+            System.exit(0);
         });
 
         frame.setVisible(true);
