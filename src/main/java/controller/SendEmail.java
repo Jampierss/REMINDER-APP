@@ -12,10 +12,12 @@ public class SendEmail {
 
     String toEmail;
     String subject;
+    String reminderDate;
 
-    public SendEmail(String toEmail, String subject) {
+    public SendEmail(String toEmail, String subject, String reminderDate) {
         this.toEmail = toEmail;
         this.subject = subject;
+        this.reminderDate = reminderDate;
     }
 
     public boolean Send() {
@@ -38,8 +40,8 @@ public class SendEmail {
             Message email = new MimeMessage(session);
             email.setFrom(new InternetAddress(fromEmail));
             email.setRecipients(Message.RecipientType.TO, InternetAddress.parse(this.toEmail));
-            email.setSubject(this.subject);
-            email.setText(this.subject);
+            email.setSubject("REMINDER: " + this.subject + " - " + this.reminderDate);
+            email.setText("REMINDER!! TO " + this.reminderDate);
 
             Transport.send(email);
             System.out.println("Email was sent correctly!");
